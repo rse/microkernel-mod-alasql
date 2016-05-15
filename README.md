@@ -22,7 +22,7 @@ Usage
 -----
 
 ```shell
-$ npm install microkernel-mod-alasql
+$ npm install microkernel microkernel-mod-alasql
 ```
 
 ```js
