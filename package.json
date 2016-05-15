@@ -1,0 +1,34 @@
+{
+    "name":        "microkernel-mod-alasql",
+    "version":     "0.9.0",
+    "description": "Microkernel module for integrating AlaSQL database",
+    "keywords": [
+        "microkernel", "module", "alasql"
+    ],
+    "repository": {
+        "type": "git",
+        "url":  "https://github.com/rse/microkernel-mod-alasql.git"
+    },
+    "author": {
+        "name":  "Ralf S. Engelschall",
+        "email": "rse@engelschall.com",
+        "url":   "http://engelschall.com"
+    },
+    "license":  "MIT",
+    "homepage": "https://github.com/rse/microkernel-mod-alasql",
+    "bugs":     "https://github.com/rse/microkernel-mod-alasql/issues",
+    "dependencies": {
+        "alasql":                 "~0.2.6",
+        "co":                     "~4.6.0",
+        "fs-promise":             "~0.5.0"
+    },
+    "peerDependencies": {
+        "microkernel":            "*",
+        "microkernel-mod-ctx":    "*",
+        "microkernel-mod-logger": "*"
+    },
+    "scripts": {
+        "prepublish": "jshint microkernel-mod-alasql.js && babel --presets es2015 microkernel-mod-alasql.js >microkernel-mod-alasql.js5"
+    },
+    "main": "microkernel-mod-alasql.js5"
+}
