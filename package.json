@@ -1,6 +1,6 @@
 {
     "name":        "microkernel-mod-alasql",
-    "version":     "0.9.1",
+    "version":     "0.9.2",
     "description": "Microkernel module for integrating AlaSQL database",
     "keywords": [
         "microkernel", "module", "alasql"
@@ -18,7 +18,7 @@
     "homepage": "https://github.com/rse/microkernel-mod-alasql",
     "bugs":     "https://github.com/rse/microkernel-mod-alasql/issues",
     "dependencies": {
-        "alasql":                 "~0.2.6",
+        "alasql":                 "~0.3.2",
         "co":                     "~4.6.0",
         "fs-promise":             "~0.5.0"
     },
