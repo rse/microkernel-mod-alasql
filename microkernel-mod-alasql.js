@@ -27,7 +27,7 @@ import path   from "path"
 
 /*  external requirements  */
 import co     from "co"
-import fs     from "fs-promise"
+import fs     from "mz/fs"
 import AlaSQL from "alasql"
 
 /*  the Microkernel module  */
