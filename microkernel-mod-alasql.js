@@ -1,6 +1,6 @@
 /*
 **  Microkernel -- Microkernel for Server Applications
-**  Copyright (c) 2015-2017 Ralf S. Engelschall <rse@engelschall.com>
+**  Copyright (c) 2016-2018 Ralf S. Engelschall <rse@engelschall.com>
 **
 **  Permission is hereby granted, free of charge, to any person obtaining
 **  a copy of this software and associated documentation files (the
@@ -23,15 +23,14 @@
 */
 
 /*  internal requirements  */
-import path   from "path"
+const path   = require("path")
 
 /*  external requirements  */
-import co     from "co"
-import fs     from "mz/fs"
-import AlaSQL from "alasql"
+const fs     = require("mz/fs")
+const AlaSQL = require("alasql")
 
 /*  the Microkernel module  */
-export default class Module {
+class Module {
     constructor (options) {
         /*  allow database to be configured initially  */
         this.options = Object.assign({
@@ -56,47 +55,48 @@ export default class Module {
                 help: "use JSON file for database", helpArg: "FILE" })
         })
     }
-    start (kernel) {
-        return co(function * () {
-            /*  provide convenience database API  */
-            const db = {
-                query (...args) {
-                    return AlaSQL.promise(...args)
-                },
-                queryOne (...args) {
-                    return this.query(...args).then((result) => {
-                        if (result.length > 1)
-                            throw new Error("more than one result found")
-                        return (result.length === 1 ? result[0] : null)
-                    })
-                }
+    async start (kernel) {
+        /*  provide convenience database API  */
+        const db = {
+            query (...args) {
+                return AlaSQL.promise(...args)
+            },
+            queryOne (...args) {
+                return this.query(...args).then((result) => {
+                    if (result.length > 1)
+                        throw new Error("more than one result found")
+                    return (result.length === 1 ? result[0] : null)
+                })
             }
-            kernel.rs("alasql", db)
+        }
+        kernel.rs("alasql", db)
 
-            /*  establish database  */
-            let ddl
-            let database = kernel.rs("options:options").database + ""
-            let exists = yield (fs.exists(database))
-            if (!exists) {
-                /*  create new database  */
-                ddl = {
-                    sql: `CREATE FILESTORAGE DATABASE db("${database}");
-                          ATTACH FILESTORAGE DATABASE db("${database}");
-                          USE DATABASE db;`,
-                    args: [ ]
-                }
-                kernel.hook("alasql:ddl", "pass", ddl)
+        /*  establish database  */
+        let ddl
+        let database = kernel.rs("options:options").database + ""
+        let exists = await fs.exists(database)
+        if (!exists) {
+            /*  create new database  */
+            ddl = {
+                sql: `CREATE FILESTORAGE DATABASE db("${database}");
+                      ATTACH FILESTORAGE DATABASE db("${database}");
+                      USE DATABASE db;`,
+                args: [ ]
             }
-            else
-                /*  use existing database  */
-                ddl = {
-                    mode: "attach",
-                    sql: `ATTACH FILESTORAGE DATABASE db("${database}");
-                          USE DATABASE db;`,
-                    args: [ ]
-                }
-            yield (db.query(ddl.sql, ddl.args))
-        }.bind(this))
+            kernel.hook("alasql:ddl", "pass", ddl)
+        }
+        else
+            /*  use existing database  */
+            ddl = {
+                mode: "attach",
+                sql: `ATTACH FILESTORAGE DATABASE db("${database}");
+                      USE DATABASE db;`,
+                args: [ ]
+            }
+        await db.query(ddl.sql, ddl.args)
     }
 }
+
+/*  export the Microkernel module  */
+module.exports = Module
 
