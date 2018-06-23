@@ -1,6 +1,6 @@
 {
     "name":        "microkernel-mod-alasql",
-    "version":     "0.9.8",
+    "version":     "0.9.9",
     "description": "Microkernel module for integrating AlaSQL database",
     "keywords": [
         "microkernel", "module", "alasql"
