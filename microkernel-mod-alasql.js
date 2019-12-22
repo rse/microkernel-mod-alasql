@@ -47,12 +47,13 @@ class Module {
     }
     latch (kernel) {
         /*  allow database to be overridden on command-line  */
-        let database = this.options.database !== null ? this.options.database :
+        const database = this.options.database !== null ? this.options.database :
             path.join(kernel.rs("ctx:datadir"), kernel.rs("ctx:program") + ".json")
         kernel.latch("options:options", (options) => {
             options.push({
                 name: "database", type: "string", "default": database,
-                help: "use JSON file for database", helpArg: "FILE" })
+                help: "use JSON file for database", helpArg: "FILE"
+            })
         })
     }
     async start (kernel) {
@@ -73,8 +74,8 @@ class Module {
 
         /*  establish database  */
         let ddl
-        let database = kernel.rs("options:options").database + ""
-        let exists = await fs.exists(database)
+        const database = kernel.rs("options:options").database + ""
+        const exists = await fs.exists(database)
         if (!exists) {
             /*  create new database  */
             ddl = {
