@@ -47,7 +47,8 @@ class Module {
     }
     latch (kernel) {
         /*  allow database to be overridden on command-line  */
-        const database = this.options.database !== null ? this.options.database :
+        const database = this.options.database !== null ?
+            this.options.database :
             path.join(kernel.rs("ctx:datadir"), kernel.rs("ctx:program") + ".json")
         kernel.latch("options:options", (options) => {
             options.push({
